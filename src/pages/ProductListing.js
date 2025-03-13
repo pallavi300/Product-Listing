@@ -11,6 +11,7 @@ const ProductListing = () => {
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
     axios
@@ -28,6 +29,7 @@ const ProductListing = () => {
   }, []);
 
   const handleFilter = (category) => {
+    setSelectedCategory(category);
     if (category === "All") {
       setFilteredProducts(products);
     } else {
@@ -38,7 +40,11 @@ const ProductListing = () => {
   const handleSearch = (term) => {
     setSearchTerm(term);
     setFilteredProducts(
-      products.filter((p) => p.title.toLowerCase().includes(term.toLowerCase()))
+      products
+        .filter(
+          (p) => selectedCategory === "All" || p.category === selectedCategory
+        )
+        .filter((p) => p.title.toLowerCase().includes(term.toLowerCase()))
     );
   };
 
